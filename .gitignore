@@ -81,7 +81,6 @@ dist
 
 # Gatsby files
 .cache/
-public
 
 # Storybook build outputs
 .out
@@ -100,9 +99,6 @@ logs
 *.db
 
 # Uploads and media files
-uploads/
-public/uploads/
-media/
 
 # IDE and Editor files
 .vscode/

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalXList API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .api-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .api-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .endpoint-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .endpoint-btn:hover {
+            background: #2980b9;
+        }
+        .endpoint-btn.auth {
+            background: #e74c3c;
+        }
+        .endpoint-btn.auth:hover {
+            background: #c0392b;
+        }
+        .response-area {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            min-height: 100px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .api-key-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .url-display {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 LocalXList API Tester</h1>
+            <p>Test your production and local APIs with proper authentication</p>
+        </div>
+
+        <div class="api-key-info">
+            <h4>📝 API Key Information:</h4>
+            <p><strong>Format:</strong> Base64 encoded "localxlist123:timestamp"</p>
+            <p><strong>Header:</strong> x-api-key</p>
+            <p><strong>Expiration:</strong> 2 minutes</p>
+            <p><strong>Current Key:</strong> <span id="currentApiKey">Generating...</span></p>
+            <button onclick="updateApiKey()">🔄 Refresh API Key</button>
+        </div>
+
+        <div>
+            <h3>🌐 API Environment:</h3>
+            <label>
+                <input type="radio" name="environment" value="production" checked onchange="updateEnvironment()">
+                Production: https://apilocalxlist.shrawantravels.com
+            </label><br>
+            <label>
+                <input type="radio" name="environment" value="local" onchange="updateEnvironment()">
+                Local: http://localhost:3002
+            </label>
+            <div class="url-display" id="currentUrl">https://apilocalxlist.shrawantravels.com</div>
+        </div>
+
+        <div class="api-section">
+            <h3>📍 Public Endpoints (No Authentication Required)</h3>
+            <button class="endpoint-btn" onclick="callAPI('/api/v1/home/seo')">Home SEO</button>
+            <button class="endpoint-btn" onclick="callAPI('/api/v1/home/topNotice')">Top Notice</button>
+            <button class="endpoint-btn" onclick="callAPI('/api/v1/home/dashboardContent')">Dashboard Content</button>
+        </div>
+
+        <div class="api-section">
+            <h3>🔐 Authenticated Endpoints (API Key Required)</h3>
+            <button class="endpoint-btn auth" onclick="callAuthAPI('/api/v1/home/countries')">Countries</button>
+            <button class="endpoint-btn auth" onclick="callAuthAPI('/api/v1/home/countriesV2')">Countries V2</button>
+            <button class="endpoint-btn auth" onclick="callAuthAPI('/api/v1/home/partners')">Partners</button>
+            <button class="endpoint-btn auth" onclick="callAuthAPI('/api/v1/home/loadMoreCountries')">Load More Countries</button>
+        </div>
+
+        <div id="status"></div>
+        <div class="response-area" id="responseArea">Click any button above to test the API endpoints...</div>
+    </div>
+
+    <script>
+        let currentEnvironment = 'production';
+        let baseUrl = 'https://apilocalxlist.shrawantravels.com';
+
+        function generateApiKey() {
+            const timestamp = Math.floor(Date.now() / 1000);
+            const keyWithTimestamp = `localxlist123:${timestamp}`;
+            const encodedKey = btoa(keyWithTimestamp);
+            return encodedKey;
+        }
+
+        function updateApiKey() {
+            const newKey = generateApiKey();
+            document.getElementById('currentApiKey').textContent = newKey;
+        }
+
+        function updateEnvironment() {
+            const env = document.querySelector('input[name="environment"]:checked').value;
+            currentEnvironment = env;
+            baseUrl = env === 'production' 
+                ? 'https://apilocalxlist.shrawantravels.com'
+                : 'http://localhost:3002';
+            document.getElementById('currentUrl').textContent = baseUrl;
+        }
+
+        function showStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${isError ? 'error' : 'success'}`;
+            statusDiv.textContent = message;
+        }
+
+        function showResponse(data, status = 200, endpoint = '') {
+            const responseArea = document.getElementById('responseArea');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            responseArea.textContent = `[${timestamp}] ${endpoint ? 'GET ' + endpoint : ''} - Status: ${status}\n\n${JSON.stringify(data, null, 2)}`;
+        }
+
+        async function callAPI(endpoint, useAuth = false) {
+            showStatus('Making API call...', false);
+            
+            const url = `${baseUrl}${endpoint}`;
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+
+            if (useAuth) {
+                headers['x-api-key'] = generateApiKey();
+                updateApiKey();
+            }
+
+            try {
+                const response = await fetch(url, { headers });
+                const data = await response.json();
+                
+                showResponse(data, response.status, endpoint);
+                
+                if (response.ok) {
+                    showStatus(`✅ Success! ${endpoint} returned ${response.status}`, false);
+                } else {
+                    showStatus(`❌ Error! ${endpoint} returned ${response.status}: ${data.message}`, true);
+                }
+            } catch (error) {
+                showStatus(`❌ Network Error: ${error.message}`, true);
+                showResponse({ error: error.message }, 0, endpoint);
+            }
+        }
+
+        function callAuthAPI(endpoint) {
+            callAPI(endpoint, true);
+        }
+
+        // Initialize
+        updateApiKey();
+        setInterval(updateApiKey, 30000); // Update key every 30 seconds
+    </script>
+</body>
+</html>
