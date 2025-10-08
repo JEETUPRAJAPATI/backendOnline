@@ -1,0 +1,38 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node app.js",
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^5.21.1",
+    "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dompurify": "^3.2.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-validator": "^7.2.0",
+    "google-auth-library": "^9.15.0",
+    "helmet": "^8.0.0",
+    "joi": "^17.13.3",
+    "jsdom": "^25.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.3",
+    "node-cache": "^5.1.2",
+    "nodemailer": "^7.0.9",
+    "xss": "^1.0.15",
+    "yup": "^1.4.0"
+  }
+}

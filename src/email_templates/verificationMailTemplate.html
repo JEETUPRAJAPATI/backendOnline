@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #4CAF50;
+            padding: 20px;
+            text-align: center;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .verification-code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <img src="{{LOGO_URL}}" alt="Localxlist Logo">
+        </div>
+        <div class="content">
+            <h3>Welcome to Localxlist!</h3>
+            <p>Your verification code is:</p>
+            <p class="verification-code">{{VERIFICATION_CODE}}</p>
+            <p>Thank you for choosing Localxlist. We are excited to have you onboard!</p>
+        </div>
+        <div class="footer">
+            <p>
+                <a href="https://localxlist.com">Home</a> | 
+                <a href="https://localxlist.com/help">Help</a> | 
+                <a href="https://localxlist.com/contact">Contact Us</a>
+            </p>
+            <p>&copy; 2024 Localxlist. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
